@@ -31,11 +31,18 @@ return [
     "all_employees" => "جميع الموظفين",
     "add_new_employee" => "اضافه موظف جديد",
     "clients_subscribes" => "اشتراكات العملاء",
-    "contacts" => "جميع الاشتراكات",
+    "subscribes" => "جميع الاشتراكات",
     "all_contacts" => "تواصل معنا",
     "all_problems" => "جميع الشكاوي",
     "payment_transactions" => "حركات الدفع",
     "all_payment_transactions" => "جميع حركات الدفع",
 
+
+    "users_count" => "عدد المستخدمين",
+    "plans_count" => "عدد الخطط",
+    "programs_count" => "عدد البرامج",
+    "exercises_count" => "عدد التمارين",
+    "show_data" => "عرض البيانات",
+    "privacy" => "جميع الحقوق محفوظه لشركه fitness@.com",
 
 ];

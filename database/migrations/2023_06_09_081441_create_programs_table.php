@@ -17,6 +17,7 @@ class CreateProgramsTable extends Migration
             $table->bigIncrements('id');
             $table->string('name_ar')->comment('اسم المستوي بالعربي');
             $table->string('name_en')->comment('اسم المستوي بالانجليزي');
+            $table->double('price',12,2)->default(0.00);
             $table->longText('description_ar');
             $table->longText('description_en');
             $table->longText('image');

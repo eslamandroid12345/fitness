@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\ProgramController;
+use App\Http\Controllers\Api\StripePaymentController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -39,11 +40,19 @@ Route::group(['middleware' => 'lang'], function (){
 
     Route::group(['prefix' => 'programs','middleware' => 'jwt'], function (){
 
-        Route::get('all',[ProgramController::class,'all']);
+        Route::get('programDetailsById/{id}',[ProgramController::class,'programDetailsById']);
 
     });
 
-    Route::get('program/detailsById/{id}',[ProgramController::class,'detailsById'])->middleware('jwt');
+
+    Route::group(['middleware' => 'jwt'], function (){
+
+        Route::post('stripe/{id}',[StripePaymentController::class,'stripePost']);
+        Route::get('program-details/{id}',[StripePaymentController::class,'programDetailSubscribe']);
+        Route::get('programs',[ProgramController::class,'programs']);
+        Route::get('notifications',[AuthController::class,'notifications']);
+
+    });
 
 
 

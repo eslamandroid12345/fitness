@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\NotificationResource;
 use App\Http\Resources\PrivacyResource;
 use App\Http\Resources\SettingResource;
 use App\Http\Resources\UserResource;
 use App\Models\Contact;
+use App\Models\Notification;
 use App\Models\Setting;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
@@ -275,8 +277,13 @@ class AuthController extends Controller {
             ->latest()
             ->first();
 
-        return self::returnResponseDataApi(new PrivacyResource($setting),trans("user_auth_api.privacy_success"),200);
+        if(!$setting){
 
+            return self::returnResponseDataApi(null,'No data inserted from database',201);
+
+        }
+
+        return self::returnResponseDataApi(new PrivacyResource($setting),trans("user_auth_api.privacy_success"),200);
 
 
    }
@@ -289,6 +296,17 @@ class AuthController extends Controller {
            ->first();
 
        return self::returnResponseDataApi(new SettingResource($setting),trans("user_auth_api.communication"),200);
+
+
+   }
+
+   public function notifications(): JsonResponse
+   {
+
+        $notifications = Notification::query()
+            ->get();
+
+       return self::returnResponseDataApi(NotificationResource::collection($notifications),"تم الحصول علي جميع الاشعارات بنجاح",200);
 
 
    }

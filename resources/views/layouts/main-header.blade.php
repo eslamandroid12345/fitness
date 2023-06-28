@@ -87,23 +87,23 @@ header start-->
 
 
             </a>
-{{--            <div class="dropdown-menu dropdown-menu-right">--}}
-{{--                <div class="dropdown-header">--}}
-{{--                    <div class="media">--}}
-{{--                        <div class="media-body">--}}
-{{--                            <h5 class="mt-0 mb-0">{{__('admin.welcome')}} eslam</h5>--}}
-{{--                            <span>eslam@gmail.com</span>--}}
-{{--                        </div>--}}
-{{--                    </div>--}}
-{{--                </div>--}}
-{{--                <div class="dropdown-divider"></div>--}}
-{{--                    <form method="post" action="{{ route('logout') }}">--}}
+            <div class="dropdown-menu dropdown-menu-right">
+                <div class="dropdown-header">
+                    <div class="media">
+                        <div class="media-body">
+                            <h5 class="mt-0 mb-0">{{trans('auth_admin.welcome_text')}} {{auth('admin')->user()->full_name}}</h5>
+                            <span>{{auth('admin')->user()->email}}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="dropdown-divider"></div>
+                    <form method="post" action="{{ route('admin.logout') }}">
 
-{{--                @csrf--}}
-{{--                <a class="dropdown-item" href="#" onclick="event.preventDefault();this.closest('form').submit();"><i class="bx bx-log-out"></i>{{__('hotels.logout_now')}}</a>--}}
-{{--            </form>--}}
+                @csrf
+                <a class="dropdown-item" href="#" onclick="event.preventDefault();this.closest('form').submit();"><i class="bx bx-log-out"></i>{{trans('auth_admin.logout')}}</a>
+            </form>
 
-{{--            </div>--}}
+            </div>
         </li>
     </ul>
 </nav>

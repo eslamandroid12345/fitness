@@ -1,5 +1,10 @@
 <?php
 
+use App\Http\Controllers\dashboard\AdminController;
+use App\Http\Controllers\dashboard\DayController;
+use App\Http\Controllers\dashboard\ProgramController;
+use App\Http\Controllers\dashboard\SettingController;
+use App\Http\Controllers\dashboard\WeekController;
 use Illuminate\Support\Facades\Route;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 
@@ -21,13 +26,55 @@ Route::group(
     ], function(){
 
 
-    Route::get('/', function () {
-        return view('programs.create');
+//    Route::get('/', function () {
+//        return view('programs.create');
+//    });
+
+
+    Route::group(['prefix' => 'admin'], function (){
+
+        Route::get('login',[AdminController::class,'login'])->name('admin.login');
+        Route::post('login',[AdminController::class,'loginProcess'])->name('admin.login');
+
+    });
+
+    Route::get('/',[AdminController::class,'welcome'])->name('admin.welcome')->middleware('auth:admin');
+
+
+    Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function (){
+
+        Route::get('all',[AdminController::class,'all'])->name('admin.all');
+        Route::get('register',[AdminController::class,'register'])->name('admin.register');
+        Route::post('register',[AdminController::class,'registerProcess'])->name('admin.register');
+        Route::post('logout',[AdminController::class,'logout'])->name('admin.logout');
+
     });
 
 
-    Route::get('admin/login', function () {
-        return view('admin.auth.login');
+
+    Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function (){
+
+        Route::resource('setting',SettingController::class)->except(['show','destroy']);
+        Route::get('setting/delete/{id}',[SettingController::class,'delete'])->name('setting.delete');
+
+
+        Route::resource('programs',ProgramController::class)->except(['show','destroy']);
+        Route::get('programs/delete/{id}',[ProgramController::class,'delete'])->name('programs.delete');
+
+
+        Route::resource('weeks',WeekController::class)->except(['show','destroy','index']);
+        Route::get('weeks/all/{id}',[WeekController::class,'allWeeks'])->name('weeks.all');
+        Route::get('weeks/delete/{id}',[WeekController::class,'delete'])->name('weeks.delete');
+
+        Route::resource('days',DayController::class)->except(['show','destroy','index']);
+        Route::get('days/all/{id}',[DayController::class,'allDays'])->name('days.all');
+        Route::get('days/delete/{id}',[DayController::class,'delete'])->name('days.delete');
+
+
+        Route::get('contacts',[AdminController::class,'contacts'])->name('admin.contacts');
+        Route::get('users/subscribes',[AdminController::class,'allSubscribes'])->name('admin.user.subscribes');
+
+
     });
 
 
@@ -74,4 +121,53 @@ protected $casts = [
     'begin' => 'date:hh:mm'
 ];
 
+ */
+
+
+/*
+ Name: Test
+Number: 4242 4242 4242 4242
+CSV: 123
+Expiration Month: 12
+Expiration Year: 2028
+ */
+
+
+
+/*
+  public function index(){
+
+
+    }
+
+
+    public function create(){
+
+
+    }
+
+
+
+    public function store(Request $request){
+
+
+    }
+
+
+    public function edit(Setting $setting){
+
+
+    }
+
+
+    public function update(Request $request,Setting $setting){
+
+
+    }
+
+
+    public function delete(Setting $setting){
+
+
+    }
  */

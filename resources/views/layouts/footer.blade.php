@@ -3,7 +3,7 @@
    <div class="row">
        <div class="col-md-6">
            <div class="text-center text-md-left">
-               <p class="mb-0"> &copy; {{trans('hotels.footer')}} <span id="copyright">
+               <p class="mb-0"> &copy; {{trans('sidebar.privacy')}} <span id="copyright">
                       {{\Carbon\Carbon::now()->format('Y')}}
                    </span>. </p>
            </div>

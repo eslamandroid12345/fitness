@@ -19,6 +19,7 @@ class ProgramTableSeeder extends Seeder
 
             "name_ar" => "خطة تجريب للمبتدئين",
             "name_en" => "Workout plan Beginner",
+            "price" => 20.00,
             'description_ar' => "04 تمارين للمبتدئين",
             'description_en' => "04 Workouts  for Beginner",
             'image' => "1.jfif",
@@ -29,6 +30,7 @@ class ProgramTableSeeder extends Seeder
 
             "name_ar" => "كسارة المرمى لكامل الجسم",
             "name_en" => "Full Body Goal Crusher",
+            "price" => 40.00,
             'description_ar' => "07 تمارين للمتوسط",
             'description_en' => "07 Workouts  for Intermediate",
             'image' => "2.jfif",
@@ -40,6 +42,7 @@ class ProgramTableSeeder extends Seeder
 
             "name_ar" => "قوة الجسم السفلية",
             "name_en" => "Lower Body Strength",
+            "price" => 60.00,
             'description_ar' => "05 تدريبات للوحش الحقيقي",
             'description_en' => "05 Workouts  for True Beast",
             'image' => "3.jfif",
@@ -51,6 +54,7 @@ class ProgramTableSeeder extends Seeder
 
             "name_ar" => "أساسيات الحفر",
             "name_en" => "Drill Essentials",
+            "price" => 80.00,
             'description_ar' => "05 تمارين للمبتدئين",
             'description_en' => "05 Workouts  for Beginner",
             'image' => "4.jfif",

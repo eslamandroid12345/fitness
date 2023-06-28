@@ -30,10 +30,18 @@ return [
     "all_employees" => "all employees",
     "add_new_employee" => "Add a new employee",
     "clients_subscribes" => "client subscriptions",
-    "contacts" => "all subscriptions",
+    "subscribes" => "all subscriptions",
     "all_contacts" => "contact us",
     "all_problems" => "all complaints",
     "payment_transactions" => "Payment Transactions",
     "all_payment_transactions" => "all payment transactions",
+
+
+    "users_count" => "number of users",
+    "plans_count" => "number of plans",
+    "programs_count" => "Number of Programs",
+    "exercises_count" => "Exercises Count",
+    "show_data" => "show data",
+    "privacy" => "All rights reserved to fitness@.com",
 
 ];
