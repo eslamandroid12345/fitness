@@ -41,6 +41,8 @@ Route::group(['middleware' => 'lang'], function (){
     Route::group(['prefix' => 'programs','middleware' => 'jwt'], function (){
 
         Route::get('programDetailsById/{id}',[ProgramController::class,'programDetailsById']);
+        Route::get('dayDetailsById/{id}',[ProgramController::class,'dayDetailsById']);
+        Route::get('exerciseDetailsById/{id}',[ProgramController::class,'exerciseDetailsById']);
 
     });
 
@@ -50,7 +52,7 @@ Route::group(['middleware' => 'lang'], function (){
         Route::post('stripe/{id}',[StripePaymentController::class,'stripePost']);
         Route::get('program-details/{id}',[StripePaymentController::class,'programDetailSubscribe']);
         Route::get('programs',[ProgramController::class,'programs']);
-        Route::get('notifications',[AuthController::class,'notifications']);
+//        Route::get('notifications',[AuthController::class,'notifications']);
 
     });
 

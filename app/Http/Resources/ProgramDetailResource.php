@@ -25,8 +25,7 @@ class ProgramDetailResource extends JsonResource
             'num_of_week' => $this->weeks->count(),
             'status' => (UserSubscribe::query()->where('user_id','=',auth('user-api')->id())->where('program_id','=',$this->id)->first()) ? 'opened' :'locked',
             'weeks' => WeekResource::collection($this->weeks),
-            'created_at' => $this->created_at->format('Y-m-d'),
-            'updated_at' => $this->created_at->format('Y-m-d'),
+
         ];
     }
 }

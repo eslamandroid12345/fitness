@@ -18,10 +18,7 @@ class DayResource extends JsonResource
 
             'id' => $this->id,
             'name' => lang() == 'ar' ? $this->name_ar : $this->name_en,
-            'title' => lang() == 'ar' ? $this->title_ar : $this->title_en,
-            'description' => lang() == 'ar' ? $this->description_ar : $this->description_en,
-            'exercises_count' => $this->exercises->count(),
-            'exercises' => ExerciseResource::collection($this->exercises),
+
         ];
     }
 }

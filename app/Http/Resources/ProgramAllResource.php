@@ -22,8 +22,7 @@ class ProgramAllResource extends JsonResource
             'description' => lang() == 'ar' ? $this->description_ar : $this->description_en,
             'image' => asset('uploads/programs/' . $this->image),
             'status' => (UserSubscribe::query()->where('user_id','=',auth('user-api')->id())->where('program_id','=',$this->id)->first()) ? 'opened' :'locked',
-            'created_at' => $this->created_at->format('Y-m-d'),
-            'updated_at' => $this->created_at->format('Y-m-d'),
+
         ];
     }
 }
