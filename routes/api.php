@@ -1,7 +1,11 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\PaymentMethodClientController;
 use App\Http\Controllers\Api\ProgramController;
+use App\Http\Controllers\Api\ResetPassword\CodeCheckController;
+use App\Http\Controllers\Api\ResetPassword\ForgotPasswordController;
+use App\Http\Controllers\Api\ResetPassword\ResetPasswordController;
 use App\Http\Controllers\Api\StripePaymentController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -52,10 +56,20 @@ Route::group(['middleware' => 'lang'], function (){
         Route::post('stripe/{id}',[StripePaymentController::class,'stripePost']);
         Route::get('program-details/{id}',[StripePaymentController::class,'programDetailSubscribe']);
         Route::get('programs',[ProgramController::class,'programs']);
-//        Route::get('notifications',[AuthController::class,'notifications']);
 
     });
 
+    Route::group(['prefix' => 'payment-methods','middleware' => 'jwt'], function (){
+
+        Route::post('create-new-payment',[PaymentMethodClientController::class,'createNewPayment']);
+        Route::get('select-all-payments',[PaymentMethodClientController::class,'selectAllPayments']);
+
+    });
+
+
+    Route::post('forget-password',  ForgotPasswordController::class);
+    Route::post('check-code', CodeCheckController::class);
+    Route::post('password-reset', ResetPasswordController::class);
 
 
 });

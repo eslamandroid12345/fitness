@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateNotificationSeensTable extends Migration
+class CreatePaymentMethodClientsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,15 @@ class CreateNotificationSeensTable extends Migration
      */
     public function up()
     {
-        Schema::create('notification_seens', function (Blueprint $table) {
+        Schema::create('payment_method_clients', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('user_id');
-            $table->unsignedBigInteger('notification_id');
-            $table->string('status')->default('seen');
-            $table->timestamps();
+            $table->string('number');
+            $table->integer('exp_month');
+            $table->integer('exp_year');
+            $table->integer('cvc');
             $table->foreign('user_id')->references('id')->on('users')->cascadeOnUpdate()->cascadeOnDelete();
-            $table->foreign('notification_id')->references('id')->on('notifications')->cascadeOnUpdate()->cascadeOnDelete();
-
+            $table->timestamps();
         });
     }
 
@@ -32,6 +32,6 @@ class CreateNotificationSeensTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('notification_seens');
+        Schema::dropIfExists('payment_method_clients');
     }
 }
