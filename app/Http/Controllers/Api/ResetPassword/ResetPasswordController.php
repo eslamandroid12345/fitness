@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\PasswordReset;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class ResetPasswordController extends Controller{
 
@@ -13,10 +14,12 @@ class ResetPasswordController extends Controller{
     {
         $request->validate([
             'password' => 'required|string|min:6|confirmed',
+            'code' => 'required|exists:password_resets,code'
         ]);
 
+
         // find the code
-        $passwordReset = PasswordReset::firstWhere('code', $request->code);
+        $passwordReset = PasswordReset::firstWhere('code','=',$request->code);
 
         // check if it does not expired: the time is one hour
         if ($passwordReset->created_at > now()->addHour()) {
@@ -25,10 +28,12 @@ class ResetPasswordController extends Controller{
         }
 
         // find user's email
-        $user = User::firstWhere('email',$passwordReset->email);
+        $user = User::query()->where('email',$passwordReset->email)->first();
 
         // update user password
-        $user->update($request->only('password'));
+        $user->update([
+            'password' => Hash::make($request->password)
+        ]);
 
         // delete current code
         $passwordReset->delete();

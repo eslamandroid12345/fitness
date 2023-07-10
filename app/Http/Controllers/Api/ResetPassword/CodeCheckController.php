@@ -11,7 +11,7 @@ class CodeCheckController extends Controller{
     public function __invoke(Request $request)
     {
         $request->validate([
-            'code' => 'required|string|exists:reset_code_passwords',
+            'code' => 'required|string|exists:password_resets',
         ]);
 
         // find the code

@@ -5,10 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class PasswordReset extends Model
+class DeviceToken extends Model
 {
     use HasFactory;
 
-    protected $table = 'password_resets';
-    protected $fillable = ['email','code'];
+
+    protected $fillable = [
+
+        'user_id',
+        'device_token',
+        'phone_type'
+    ];
 }

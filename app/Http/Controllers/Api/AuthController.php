@@ -7,33 +7,32 @@ use App\Http\Resources\PrivacyResource;
 use App\Http\Resources\SettingResource;
 use App\Http\Resources\UserResource;
 use App\Models\Contact;
-use App\Models\Notification;
+use App\Models\DeviceToken;
 use App\Models\Setting;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller {
 
 
-    public function login(Request $request): JsonResponse
+    public function login(Request $request)
     {
         try {
 
             $rules = [
-                'email' => 'nullable|email|exists:users,email',
-                'type' => 'required|in:email,phone',
-                'phone' => 'nullable|numeric|exists:users,phone',
-                'password' => 'required',
+                'username' => 'required',
+                'password' => 'required|min:6',
+                'device_token' => 'required',
+                'phone_type' => 'required|in:android,ios',
             ];
             $validator = Validator::make($request->all(), $rules, [
-                'email.email' => 406,
-                'type.in' => 407,
-                'email.exists' => 408,
-                'phone.exists' => 409,
+                'password.min' => 406,
+
             ]);
 
             if ($validator->fails()) {
@@ -43,10 +42,8 @@ class AuthController extends Controller {
 
 
                     $errors_arr = [
-                        406 => trans('user_auth_api.email_email'),
-                        407 => trans('user_auth_api.type_in'),
-                        408 => trans('user_auth_api.email_exists'),
-                        409 => trans('user_auth_api.phone_exists')
+                        406 => 'Failed,Password must be be at least 6',
+
                     ];
 
                     $code = collect($validator->errors())->flatten(1)[0];
@@ -56,16 +53,15 @@ class AuthController extends Controller {
             }
 
 
-            if($request->email == null && $request->phone == null){
+            $field = $request->username;
 
-                return self::returnResponseDataApi(null,trans("message_email_or_phone"),422,422);
-            }
-
-            if($request->type == 'email'){
-                $token = Auth::guard('user-api')->attempt($request->only(['email', 'password']));
+            if(is_numeric($field)){
+                $phone = $field;
+                $token = Auth::guard('user-api')->attempt(['phone' => $phone,'password' => $request->password]);
 
             }else{
-                $token = Auth::guard('user-api')->attempt($request->only(['phone', 'password']));
+                $email = $field;
+                $token = Auth::guard('user-api')->attempt(['email' => $email,'password' => $request->password]);
 
             }
 
@@ -76,11 +72,18 @@ class AuthController extends Controller {
 
             $user = Auth::guard('user-api')->user();
             $user['token'] = $token;
+
+            DeviceToken::create([
+                'user_id'      => $user->id,
+                'device_token' => $request->device_token,
+                'phone_type'   => $request->phone_type
+            ]);
+
             return self::returnResponseDataApi(new UserResource($user),trans('user_auth_api.message_success'),200);
 
         } catch (\Exception $exception) {
 
-            return self::returnResponseDataApi($exception->getMessage(),500,false,500);
+            return self::returnResponseDataApi($exception->getMessage(),500,500);
         }
     }
 
@@ -94,6 +97,8 @@ class AuthController extends Controller {
                 'email' => 'required|email|unique:users,email',
                 'phone' => 'required|numeric|unique:users,phone',
                 'password' => 'required|min:6|max:16',
+                'device_token' => 'required',
+                'phone_type' => 'required|in:android,ios',
             ];
             $validator = Validator::make($request->all(), $rules, [
                 'email.email' => 406,
@@ -120,17 +125,22 @@ class AuthController extends Controller {
             }
 
             $user = User::create([
-
                 'full_name' => $request->full_name,
                 'phone' => $request->phone,
                 'email' => $request->email,
                 'password' => Hash::make($request->password),
-
             ]);
 
-            if($user->save()) {
+            $deviceToken = DeviceToken::create([
+                'user_id' => $user->id,
+                'device_token' => $request->device_token,
+                'phone_type' => $request->phone_type
+            ]);
+
+            if($user->save() && $deviceToken->save()) {
 
                 $user['token'] = Auth::guard('user-api')->attempt($request->only(['email', 'password']));
+
                 return self::returnResponseDataApi(new UserResource($user),trans('user_auth_api.message_success_register'),200);
 
             }else{
@@ -303,6 +313,7 @@ class AuthController extends Controller {
    public function notifications(): JsonResponse
    {
 
+
         $notifications = Notification::query()
             ->get();
 
@@ -311,10 +322,26 @@ class AuthController extends Controller {
 
    }
 
-    public function logout(): JsonResponse{
+    public function logout(Request $request): JsonResponse{
 
         try {
+
+            $rules = [
+                'device_token' => 'required|exists:device_tokens,device_token',
+
+            ];
+            $validator = Validator::make($request->all(), $rules);
+
+            if ($validator->fails()) {
+                return self::returnResponseDataApi(null,$validator->errors()->first(),422,422);
+
+            }
             auth('user-api')->logout();
+
+            DB::table('device_tokens')
+                ->where('device_token','=',$request->device_token)
+                ->delete();
+
             return self::returnResponseDataApi(null,trans('user_auth_api.logout'),200);
 
         } catch (\Exception $exception) {

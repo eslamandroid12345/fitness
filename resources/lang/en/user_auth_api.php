@@ -5,7 +5,7 @@ return [
 
     //start login user
     "message_success" => "Successful login",
-    "message_failed" => "Login failed, please enter the correct information and try to login again",
+    "message failed" => "Login failed, please log in using your mobile phone or email",
     "email_email" => "The email must be an email",
     "type_in" => "The field type must be entered as a mobile phone or email",
     "email_exists" => "The email does not exist",
